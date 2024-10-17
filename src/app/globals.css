@@ -3,25 +3,181 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --border: 0 0% 14.9%;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --border: 0 0% 14.9%;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer base {
+  .border-border {
+    border: var(--border);
   }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@property --a {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: true;
+}
+
+.gooey-button {
+  --a: 0%;
+  --hue: 170deg;
+  --x: 50;
+  --y: 50;
+  --button: hsl(var(--hue), 66%, 66%);
+  --edge: 20px;
+  --size: 2em;
+
+  background: transparent;
+  color: hsla(var(--hue), 80%, 30%, 0.7);
+  font-size: 1.8em;
+  position: relative;
+  padding: calc(var(--size)) calc(var(--size) * 1.5);
+  animation: color 20s linear infinite both;
+  transition: --a 0.5s ease-in-out,
+    scale var(--spring-duration) var(--spring-easing);
+  scale: 0.92;
+  isolation: isolate;
+}
+
+.gooey-button:hover {
+  --a: 100%;
+  transition-duration: 0.5s, 1s;
+  box-shadow: none;
+  opacity: 1;
+  scale: 1;
+}
+
+.gooey-button:before {
+  content: "";
+  position: absolute;
+  inset: 0em;
+  filter: blur(12px) url(#goo)
+    drop-shadow(0 0.25em 0.5em hsla(0deg, 0%, 0%, 0.8));
+  background-image: linear-gradient(0deg, var(--button), var(--button)),
+    radial-gradient(
+      40% 70% at calc(var(--x) * 1%) calc(var(--y) * 1%),
+      hsla(var(--hue), 77%, 77%, var(--a)) 0%,
+      transparent 90%
+    );
+  background-clip: content-box, border-box;
+  padding: 24px;
+  z-index: -1;
+  border: inherit;
+  animation: color 20s linear infinite both;
+}
+
+@property --hue {
+  syntax: "<angle>";
+  initial-value: 170deg;
+  inherits: false;
+}
+
+@keyframes color {
+  from {
+    --hue: 170deg;
+  }
+  to {
+    --hue: 530deg;
+  }
+}
+
+:root {
+  --spring-easing: linear(
+    0,
+    0.002,
+    0.01 0.9%,
+    0.038 1.8%,
+    0.156,
+    0.312 5.8%,
+    0.789 11.1%,
+    1.015 14.2%,
+    1.096,
+    1.157,
+    1.199,
+    1.224 20.3%,
+    1.231,
+    1.231,
+    1.226,
+    1.214 24.6%,
+    1.176 26.9%,
+    1.057 32.6%,
+    1.007 35.5%,
+    0.984,
+    0.968,
+    0.956,
+    0.949 42%,
+    0.946 44.1%,
+    0.95 46.5%,
+    0.998 57.2%,
+    1.007,
+    1.011 63.3%,
+    1.012 68.3%,
+    0.998 84%,
+    1
+  );
+  --spring-duration: 1.66s;
 }
